@@ -33,7 +33,7 @@ export const useFetchTokensList = (chainId: number | null, type: TokenListType) 
 
   return useQuery({
     enabled: !!chainId && !!type,
-    queryKey: [TOKENS.FETCH_TOKENS_LIST, chainId],
+    queryKey: [TOKENS.FETCH_TOKENS_LIST, chainId, type],
     queryFn: fetchTokensList,
     refetchOnWindowFocus: false,
     staleTime: Infinity,

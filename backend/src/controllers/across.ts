@@ -32,8 +32,31 @@ const getQuote = async (req: Request, res: Response, next: NextFunction) => {
       inputAmount: ethers.parseUnits(inputAmount, inputTokenInfo.decimals),
     });
 
-    res.status(200).json({ quote });
+    res.status(200).json({
+      message: "Quote fetched successfully.",
+      quote: {
+        deposit: {
+          ...quote.deposit,
+          inputAmount: quote.deposit.inputAmount.toString(),
+          outputAmount: quote.deposit.outputAmount.toString(),
+        },
+        limits: {
+          minDeposit: quote.limits.minDeposit.toString(),
+          maxDeposit: quote.limits.maxDeposit.toString(),
+          maxDepositInstant: quote.limits.maxDepositInstant.toString(),
+        },
+        fees: {
+          lpFee: quote.fees.lpFee.total.toString(),
+          relayerGasFee: quote.fees.relayerGasFee.total.toString(),
+          relayerCapitalFee: quote.fees.relayerCapitalFee.total.toString(),
+          totalRelayFee: quote.fees.totalRelayFee.total.toString(),
+        },
+        isAmountTooLow: quote.isAmountTooLow,
+        estimatedFillTimeSec: quote.estimatedFillTimeSec,
+      },
+    });
   } catch (error) {
+    console.log("error :", error);
     res.status(500).json({ message: "Something went wrong." });
   }
 };

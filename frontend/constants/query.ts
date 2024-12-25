@@ -1,3 +1,7 @@
 export enum TOKENS {
   FETCH_TOKENS_LIST = "FETCH_TOKENS_LIST",
 }
+
+export enum QUOTE {
+  FETCH_QUOTE = "FETCH_QUOTE",
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "../Modal";
 import { mainnet, optimism, arbitrum, base, bsc, zksync, mode, polygon } from "viem/chains";
 import { chainIdToImage } from "@/lib/chainIdToImage";
@@ -39,16 +39,20 @@ function ChainModal(props: TProps) {
   return (
     <Modal isOpen={props.isOpen} onClose={closeModal}>
       <h2 className="text-xl font-semibold mb-2 ml-10 mt-4">Select chain and token</h2>
-      <div className="flex gap-8 justify-center mt-8 flex-wrap px-2 pb-4 h-1/3">
+      <div className="flex gap-8 justify-center mt-8 flex-wrap px-2 pb-4">
         {chains.map((chain) => {
           return (
-            <div key={chain.id} className="cursor-pointer rounded-xl border-2 border-gray-600 m-0 p-0" onClick={() => setCurrentChainId(chain.id)}>
+            <div
+              key={chain.id}
+              className="cursor-pointer rounded-xl border-2 border-gray-600 m-0 p-0 h-[70px]"
+              onClick={() => setCurrentChainId(chain.id)}
+            >
               <Image src={chainIdToImage(chain.id).url} alt={chain.name} width={60} height={60} className="p-2" />
             </div>
           );
         })}
       </div>
-      <div className="overflow-y-scroll w-full p-0 mt-4 bg-black h-2/3">
+      <div className="overflow-y-scroll w-full p-0 mt-4 bg-black h-[70%]">
         {data ? (
           data?.map((token, index) => {
             return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import InputTokenCard from "./InputTokenCard";
@@ -10,6 +10,7 @@ import { IoArrowDownSharp } from "react-icons/io5";
 import ChainModal from "../Modal/ChainModal/ChainModal";
 import { TokenListType } from "@/types/token";
 import { TokenInfo } from "@across-protocol/app-sdk";
+import { useFetchQuote } from "@/hooks/useFetchQuote";
 
 const TransactionCard = () => {
   const [inputAmount, setInputAmount] = useState("");
@@ -19,6 +20,30 @@ const TransactionCard = () => {
   const [outputToken, setOutputToken] = useState<TokenInfo | null>(null);
   const [inputChainId, setInputChainId] = useState<number | null>(null);
   const [outputChainId, setOutputChainId] = useState<number | null>(null);
+
+  const { mutateAsync: fetchQuote } = useFetchQuote();
+
+  const handleFetchQuote = useCallback(async () => {
+    if (!inputAmount || !inputChainId || !outputChainId || !inputToken || !outputToken) return;
+
+    const data = await fetchQuote({
+      originChainId: inputChainId,
+      destinationChainId: outputChainId,
+      inputToken: inputToken.address,
+      outputToken: outputToken.address,
+      inputAmount: inputAmount,
+    });
+  }, [inputAmount, inputChainId, outputChainId, inputToken, outputToken]);
+
+  useEffect(() => {
+    if (!inputAmount || !inputChainId || !outputChainId || !inputToken || !outputToken) return;
+
+    const debouncedFunction = setTimeout(() => {
+      handleFetchQuote();
+    }, 1500);
+
+    return () => clearTimeout(debouncedFunction);
+  }, [inputAmount, inputChainId, outputChainId, inputToken, outputToken, handleFetchQuote]);
 
   return (
     <Card className="w-[30rem] m-auto mt-[10vh]">
