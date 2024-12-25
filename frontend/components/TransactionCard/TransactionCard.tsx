@@ -3,33 +3,53 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
-import InputTokenCard from "./InputToken";
+import InputTokenCard from "./InputTokenCard";
 import OutputTokenCard from "./OutputTokenCard";
 import TransactionCardTitle from "./TransactionCardTitle";
 import { IoArrowDownSharp } from "react-icons/io5";
 import ChainModal from "../Modal/ChainModal/ChainModal";
 import { TokenListType } from "@/types/token";
+import { TokenInfo } from "@across-protocol/app-sdk";
 
 const TransactionCard = () => {
-  const [inputAmount, setInputAmount] = useState("0");
+  const [inputAmount, setInputAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tokenType, setTokenType] = useState<TokenListType | null>(null);
-  //create modal to select the tokens and chains
+  const [inputToken, setInputToken] = useState<TokenInfo | null>(null);
+  const [outputToken, setOutputToken] = useState<TokenInfo | null>(null);
+  const [inputChainId, setInputChainId] = useState<number | null>(null);
+  const [outputChainId, setOutputChainId] = useState<number | null>(null);
 
   return (
-    <Card className="w-[30rem] m-auto mt-[10rem]">
+    <Card className="w-[30rem] m-auto mt-[10vh]">
       <TransactionCardTitle />
       <CardContent>
-        <InputTokenCard amount={inputAmount} setAmount={setInputAmount} setIsModalOpen={setIsModalOpen} setTokenType={setTokenType} />
+        <InputTokenCard
+          amount={inputAmount}
+          setAmount={setInputAmount}
+          setIsModalOpen={setIsModalOpen}
+          setTokenType={setTokenType}
+          token={inputToken}
+          chainId={inputChainId}
+        />
         <div className="flex justify-center mr-12">
           <IoArrowDownSharp className="mb-2 text-3xl text-center" />
         </div>
-        <OutputTokenCard setIsModalOpen={setIsModalOpen} setTokenType={setTokenType} />
+        <OutputTokenCard setIsModalOpen={setIsModalOpen} setTokenType={setTokenType} chainId={outputChainId} token={outputToken} />
       </CardContent>
       <CardFooter>
         <Button className="w-[90%] h-[50px] m-auto text-xl">Swap</Button>
       </CardFooter>
-      {tokenType && <ChainModal isOpen={isModalOpen} setIsOpen={() => setIsModalOpen(false)} tokenType={tokenType} />}
+      {tokenType && (
+        <ChainModal
+          isOpen={isModalOpen}
+          setIsOpen={() => setIsModalOpen(false)}
+          tokenType={tokenType}
+          setToken={tokenType === TokenListType.INPUT ? setInputToken : setOutputToken}
+          setChainId={tokenType === TokenListType.INPUT ? setInputChainId : setOutputChainId}
+          chainId={tokenType === TokenListType.INPUT ? inputChainId : outputChainId}
+        />
+      )}
     </Card>
   );
 };

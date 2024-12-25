@@ -3,6 +3,9 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { TokenListType } from "@/types/token";
+import { chainIdToImage } from "@/lib/chainIdToImage";
+import { TokenInfo } from "@across-protocol/app-sdk";
+import { Skeleton } from "../ui/skeleton";
 
 type TProps = {
   isDisabled?: boolean;
@@ -11,6 +14,8 @@ type TProps = {
   setAmount?: React.Dispatch<React.SetStateAction<string>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setTokenType: React.Dispatch<React.SetStateAction<TokenListType | null>>;
+  chainId: number | null;
+  token: TokenInfo | null;
 };
 
 const TokenInput = (props: TProps) => {
@@ -39,14 +44,16 @@ const TokenInput = (props: TProps) => {
         />
       </div>
       <Button className="h-[4rem] w-[6rem] mt-6 relative" variant={"secondary"} onClick={openModal}>
-        <Image src="https://assets.coingecko.com/coins/images/12504/small/uniswap-uni.png?1600306604" alt="token-icon" width={40} height={40} />
-        <Image
-          src="https://assets.coingecko.com/coins/images/12504/small/uniswap-uni.png?1600306604"
-          alt="token-icon"
-          width={25}
-          height={25}
-          className="absolute top-8 left-12"
-        />
+        {props.token?.logoUrl ? (
+          <Image src={props?.token?.logoUrl} alt="token-icon" width={40} height={40} />
+        ) : (
+          <Skeleton className="h-12 w-12 rounded-full" />
+        )}
+        {props.chainId ? (
+          <Image src={chainIdToImage(props.chainId).url} alt="token-icon" width={25} height={25} className="absolute top-8 left-12" />
+        ) : (
+          <Skeleton className="h-6 w-6 rounded-full absolute top-8 left-12" />
+        )}
       </Button>
     </div>
   );

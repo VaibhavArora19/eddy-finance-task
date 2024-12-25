@@ -1,6 +1,6 @@
 import { CardDescription, CardHeader, CardTitle } from "../ui/card";
 
-const TransactionCardTitle = () => {
+const TransactionCardTitle = (): JSX.Element => {
   return (
     <CardHeader>
       <CardTitle className="text-4xl mt-4">Swap</CardTitle>
