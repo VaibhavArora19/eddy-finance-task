@@ -4,6 +4,7 @@ import "./globals.css";
 import { AppKit } from "@/context/appkit";
 import Navbar from "@/components/(ui)/Navbar";
 import QueryProvider from "@/context/queryProvider";
+import { ThemeProvider } from "@/context/theme-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,12 +30,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AppKit>
-          <QueryProvider>
-            <Navbar />
-            {children}
-          </QueryProvider>
-        </AppKit>
+        <ThemeProvider attribute="class" defaultTheme="dark">
+          <AppKit>
+            <QueryProvider>
+              <Navbar />
+              {children}
+            </QueryProvider>
+          </AppKit>
+        </ThemeProvider>
       </body>
     </html>
   );
