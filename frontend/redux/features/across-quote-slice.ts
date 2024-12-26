@@ -8,7 +8,7 @@ interface InitialState {
 
 const initialState: InitialState = {
   quote: null,
-  outputAmount: "0.0",
+  outputAmount: "",
 };
 
 const acrossQuoteSlice = createSlice({

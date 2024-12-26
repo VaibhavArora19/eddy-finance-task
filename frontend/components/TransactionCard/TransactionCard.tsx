@@ -13,6 +13,8 @@ import { TokenInfo } from "@across-protocol/app-sdk";
 import { useFetchQuote } from "@/hooks/useFetchQuote";
 import { useAppDispatch } from "@/redux/hooks";
 import { acrossQuoteActions } from "@/redux/actions";
+import { useAcrossQuoteStore } from "@/redux/hooks";
+import { Loader2 } from "lucide-react";
 
 const TransactionCard = () => {
   const [inputAmount, setInputAmount] = useState("");
@@ -25,7 +27,9 @@ const TransactionCard = () => {
 
   const dispatch = useAppDispatch();
 
-  const { mutateAsync: fetchQuote } = useFetchQuote();
+  const { mutateAsync: fetchQuote, isPending } = useFetchQuote();
+
+  const { quote } = useAcrossQuoteStore();
 
   const handleFetchQuote = useCallback(async () => {
     if (!inputAmount || !inputChainId || !outputChainId || !inputToken || !outputToken) return;
@@ -74,7 +78,16 @@ const TransactionCard = () => {
         <OutputTokenCard setIsModalOpen={setIsModalOpen} setTokenType={setTokenType} chainId={outputChainId} token={outputToken} />
       </CardContent>
       <CardFooter>
-        <Button className="w-[90%] h-[50px] m-auto text-xl">Swap</Button>
+        {isPending ? (
+          <Button disabled className="w-[90%] h-[50px] m-auto text-xl">
+            <Loader2 className="animate-spin " />
+            Fetching quote
+          </Button>
+        ) : (
+          <Button className="w-[90%] h-[50px] m-auto text-xl" disabled={quote ? false : true}>
+            Swap
+          </Button>
+        )}
       </CardFooter>
       {tokenType && (
         <ChainModal
