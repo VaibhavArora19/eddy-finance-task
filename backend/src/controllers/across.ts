@@ -1,6 +1,7 @@
 import { Request, NextFunction, Response } from "express";
 import { ethers } from "ethers";
 import client from "../config/across";
+import { GetQuoteParams } from "@across-protocol/app-sdk";
 
 const getQuote = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -11,20 +12,25 @@ const getQuote = async (req: Request, res: Response, next: NextFunction) => {
       return;
     }
 
-    const chainInfo = await client.getChainInfo(originChainId);
+    const inputChainInfo = await client.getChainInfo(originChainId);
 
-    const inputTokenInfo = chainInfo.inputTokens.find((token) => ethers.getAddress(token.address) === ethers.getAddress(inputToken));
+    const outputChainInfo = await client.getChainInfo(destinationChainId);
 
-    if (!inputTokenInfo) {
-      res.status(400).json({ message: "Invalid input token." });
+    const inputTokenInfo = inputChainInfo.inputTokens.find((token) => ethers.getAddress(token.address) === ethers.getAddress(inputToken));
+
+    const outputTokenInfo = outputChainInfo.outputTokens.find((token) => ethers.getAddress(token.address) === ethers.getAddress(outputToken));
+
+    if (!inputTokenInfo || !outputTokenInfo) {
+      res.status(400).json({ message: "Invalid input or output token." });
       return;
     }
 
-    const route = {
+    const route: GetQuoteParams["route"] = {
       originChainId,
       destinationChainId,
       inputToken: inputToken,
       outputToken: outputToken,
+      isNative: inputTokenInfo.symbol === "ETH",
     };
 
     const quote = await client.getQuote({
@@ -54,6 +60,7 @@ const getQuote = async (req: Request, res: Response, next: NextFunction) => {
         isAmountTooLow: quote.isAmountTooLow,
         estimatedFillTimeSec: quote.estimatedFillTimeSec,
       },
+      outputAmount: ethers.formatUnits(quote.deposit.outputAmount.toString(), outputTokenInfo.decimals),
     });
   } catch (error) {
     console.log("error :", error);

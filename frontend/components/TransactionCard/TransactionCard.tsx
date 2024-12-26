@@ -11,6 +11,8 @@ import ChainModal from "../Modal/ChainModal/ChainModal";
 import { TokenListType } from "@/types/token";
 import { TokenInfo } from "@across-protocol/app-sdk";
 import { useFetchQuote } from "@/hooks/useFetchQuote";
+import { useAppDispatch } from "@/redux/hooks";
+import { acrossQuoteActions } from "@/redux/actions";
 
 const TransactionCard = () => {
   const [inputAmount, setInputAmount] = useState("");
@@ -21,18 +23,27 @@ const TransactionCard = () => {
   const [inputChainId, setInputChainId] = useState<number | null>(null);
   const [outputChainId, setOutputChainId] = useState<number | null>(null);
 
+  const dispatch = useAppDispatch();
+
   const { mutateAsync: fetchQuote } = useFetchQuote();
 
   const handleFetchQuote = useCallback(async () => {
     if (!inputAmount || !inputChainId || !outputChainId || !inputToken || !outputToken) return;
 
-    const data = await fetchQuote({
-      originChainId: inputChainId,
-      destinationChainId: outputChainId,
-      inputToken: inputToken.address,
-      outputToken: outputToken.address,
-      inputAmount: inputAmount,
-    });
+    try {
+      const data = await fetchQuote({
+        originChainId: inputChainId,
+        destinationChainId: outputChainId,
+        inputToken: inputToken.address,
+        outputToken: outputToken.address,
+        inputAmount: inputAmount,
+      });
+
+      dispatch(acrossQuoteActions.setQuote(data.quote));
+      dispatch(acrossQuoteActions.setOutputAmount(data.outputAmount));
+    } catch (error) {
+      console.log(error);
+    }
   }, [inputAmount, inputChainId, outputChainId, inputToken, outputToken]);
 
   useEffect(() => {

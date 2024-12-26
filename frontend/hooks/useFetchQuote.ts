@@ -2,14 +2,13 @@ import { QUOTE } from "@/constants/query";
 import { TQuoteArgs, TQuoteResponse } from "@/types/quote";
 import { useMutation } from "@tanstack/react-query";
 import { _axios } from "@/config/axios";
-import { Quote } from "@across-protocol/app-sdk";
 
 export const useFetchQuote = () => {
-  const fetchQuote = async (quoteAgrs: TQuoteArgs): Promise<Quote> => {
+  const fetchQuote = async (quoteAgrs: TQuoteArgs): Promise<Omit<TQuoteResponse, "message">> => {
     try {
       const { data } = await _axios.post<TQuoteResponse>("/quote", quoteAgrs);
 
-      return data.quote;
+      return { quote: data.quote, outputAmount: data.outputAmount };
     } catch (error) {
       console.log(error);
       throw new Error("Something went wrong.");

@@ -6,6 +6,7 @@ import { TokenListType } from "@/types/token";
 import { chainIdToImage } from "@/lib/chainIdToImage";
 import { TokenInfo } from "@across-protocol/app-sdk";
 import { Skeleton } from "../ui/skeleton";
+import { useAcrossQuoteStore } from "@/redux/hooks";
 
 type TProps = {
   isDisabled?: boolean;
@@ -19,6 +20,8 @@ type TProps = {
 };
 
 const TokenInput = (props: TProps) => {
+  const { outputAmount } = useAcrossQuoteStore();
+
   const openModal = () => {
     props.setTokenType(props?.isDisabled ? TokenListType.OUTPUT : TokenListType.INPUT);
     props.setIsModalOpen(true);
@@ -32,10 +35,10 @@ const TokenInput = (props: TProps) => {
         </Label>
         <Input
           type="text"
-          placeholder={props?.amount ?? "0.0"}
+          placeholder={props?.isDisabled ? outputAmount : props?.amount}
           disabled={props?.isDisabled ?? false}
           className="h-[4rem] w-[20rem] text-lg"
-          value={props?.amount ?? "0.0"}
+          value={props?.isDisabled ? outputAmount : props?.amount}
           onChange={(e) => {
             if (props?.setAmount) {
               props?.setAmount(e.target.value);
