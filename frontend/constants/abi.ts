@@ -105,6 +105,11 @@ export const ABI = [
         name: "_quoteTimestamp",
         type: "uint32",
       },
+      {
+        internalType: "uint32",
+        name: "_exclusivityDeadline",
+        type: "uint32",
+      },
     ],
     name: "deposit",
     outputs: [],

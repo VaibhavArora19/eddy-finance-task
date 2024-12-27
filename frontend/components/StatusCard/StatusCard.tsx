@@ -1,20 +1,25 @@
 import { Card, CardContent } from "../ui/card";
 import StatusCardTitle from "./StatusCardTitle";
-import { useTransactionStatusStore } from "@/redux/hooks";
 import { useFetchTokensList } from "@/hooks/useFetchTokenList";
 import { TokenListType } from "@/types/token";
 import { ethers } from "ethers";
 import Image from "next/image";
 import { chainIdToImage } from "@/lib/chainIdToImage";
 import { TiArrowRight } from "react-icons/ti";
+import { Deposit } from "@across-protocol/app-sdk";
 
-function StatusCard() {
-  const { txHash, currentState, deposit } = useTransactionStatusStore();
+type TProps = {
+  txHash: string;
+  currentState: string;
+  deposit?: Deposit;
+};
+
+function StatusCard({ txHash, currentState, deposit }: TProps) {
   const { data: inputTokens } = useFetchTokensList(deposit?.originChainId, TokenListType.INPUT);
   const { data: outputTokens } = useFetchTokensList(deposit?.destinationChainId, TokenListType.OUTPUT);
 
   return (
-    <Card className="w-[24rem] h-[30rem] mt-[13vh]">
+    <Card className="w-[24rem] h-[31rem] mt-[12vh]">
       <StatusCardTitle />
       <CardContent>
         <div>
@@ -31,15 +36,13 @@ function StatusCard() {
           <div className="mt-8 flex justify-between gap-4">
             <div>
               <h1>Source Tx Hash: </h1>
-              <h2>
-                {txHash?.substring(0, 10)} ... {txHash?.substring(txHash.length - 10)}
-              </h2>
+              <h2>{txHash?.substring(0, 6) + "..." + txHash?.substring(txHash.length - 6)}</h2>
             </div>
             <div>
               <h1>Destination Tx Hash: </h1>
               <h2>
-                {deposit?.depositTxHash
-                  ? deposit?.depositTxHash.substring(0, 10) + "..." + deposit?.depositTxHash?.substring(deposit?.depositTxHash.length - 10)
+                {deposit?.fillTxHash
+                  ? deposit?.fillTxHash.substring(0, 6) + "..." + deposit?.fillTxHash?.substring(deposit?.fillTxHash.length - 6)
                   : "..."}
               </h2>
             </div>
@@ -53,8 +56,8 @@ function StatusCard() {
                     <Image
                       src={inputTokens.find((token) => ethers.getAddress(token.address) === ethers.getAddress(deposit?.inputToken))?.logoUrl ?? ""}
                       alt={"Input token"}
-                      width={60}
-                      height={60}
+                      width={40}
+                      height={40}
                       className="p-2"
                     />
                   ) : (
@@ -69,8 +72,8 @@ function StatusCard() {
                     <Image
                       src={outputTokens.find((token) => ethers.getAddress(token.address) === ethers.getAddress(deposit?.outputToken))?.logoUrl ?? ""}
                       alt={"output token"}
-                      width={60}
-                      height={60}
+                      width={40}
+                      height={40}
                       className="p-2"
                     />
                   ) : (
@@ -84,7 +87,7 @@ function StatusCard() {
               <div className="flex gap-4">
                 <div>
                   {deposit?.originChainId ? (
-                    <Image src={chainIdToImage(deposit?.originChainId).url} alt={"chain"} width={25} height={25} className="p-2" />
+                    <Image src={chainIdToImage(deposit?.originChainId).url} alt={"chain"} width={40} height={40} className="p-2" />
                   ) : (
                     "..."
                   )}
@@ -92,7 +95,7 @@ function StatusCard() {
                 <TiArrowRight className="mt-2" />
                 <div>
                   {deposit?.destinationChainId ? (
-                    <Image src={chainIdToImage(deposit?.destinationChainId).url} alt={"chain"} width={25} height={25} className="p-2" />
+                    <Image src={chainIdToImage(deposit?.destinationChainId).url} alt={"chain"} width={40} height={40} className="p-2" />
                   ) : (
                     "..."
                   )}

@@ -15,7 +15,8 @@ const useSwap = () => {
     outputAmount: string,
     destinationChainId: number,
     exclusiveRelayer: string,
-    quoteTimestamp: number
+    quoteTimestamp: number,
+    exclusivityDeadline: number
   ) => {
     try {
       //@ts-expect-error metamask might not be available
@@ -41,10 +42,17 @@ const useSwap = () => {
         outputAmount,
         destinationChainId,
         exclusiveRelayer,
-        quoteTimestamp
+        quoteTimestamp,
+        exclusivityDeadline,
+        {
+          gasLimit: "200000",
+        }
       );
 
+      console.log("tx is", tx);
       const transactionReceipt: TransactionReceipt = await tx.wait();
+
+      console.log("transactionReceipt is", transactionReceipt);
 
       const txHash = transactionReceipt.hash;
 

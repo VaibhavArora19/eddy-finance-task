@@ -1,9 +1,15 @@
 import client from "@/config/across";
 import { TRANSACTION } from "@/constants/query";
 import { useQuery } from "@tanstack/react-query";
+import { useAppDispatch } from "@/redux/hooks";
+import { transactionStatusActions } from "@/redux/actions";
 
-const useFetchTransactionStatus = (originChainId: number, destinationChainId: number, depositTxHash: string) => {
+const useFetchTransactionStatus = (originChainId: number | undefined, destinationChainId: number | undefined, depositTxHash: string | null) => {
+  const dispatch = useAppDispatch();
+
   const fetchTransactionStatus = async () => {
+    if (!originChainId || !destinationChainId || !depositTxHash) return;
+
     const status = await client.getDeposit({
       findBy: {
         originChainId: originChainId,
@@ -11,6 +17,9 @@ const useFetchTransactionStatus = (originChainId: number, destinationChainId: nu
         depositTxHash: depositTxHash as `0x${string}`,
       },
     });
+
+    dispatch(transactionStatusActions.setCurrentState(status.status));
+    dispatch(transactionStatusActions.setDeposit(status));
 
     return status;
   };

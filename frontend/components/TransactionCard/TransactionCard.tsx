@@ -64,7 +64,8 @@ const TransactionCard = () => {
       quote?.deposit.outputAmount,
       outputChainId,
       quote?.deposit.exclusiveRelayer,
-      quote?.deposit.quoteTimestamp
+      quote?.deposit.quoteTimestamp,
+      quote?.deposit.exclusivityDeadline
     );
   };
 

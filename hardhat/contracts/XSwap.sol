@@ -56,7 +56,8 @@ contract XSwap {
         uint256 _outputAmount,
         uint256 _destinationChainId,
         address _exclusiveRelayer,
-        uint32 _quoteTimestamp
+        uint32 _quoteTimestamp,
+        uint32 _exclusivityDeadline
     ) external {
         require(_inputAmount > 0, "Input amount must be greater than 0");
         require(_outputAmount > 0, "Output amount must be greater than 0");
@@ -87,7 +88,7 @@ contract XSwap {
             _exclusiveRelayer,
             _quoteTimestamp,
             uint32(block.timestamp) + spokePool.fillDeadlineBuffer(),
-            0,
+            _exclusivityDeadline,
             ""
         );
 
