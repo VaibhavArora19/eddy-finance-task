@@ -16,6 +16,7 @@ import { acrossQuoteActions } from "@/redux/actions";
 import { useAcrossQuoteStore } from "@/redux/hooks";
 import { Loader2 } from "lucide-react";
 import GasEstimate from "../(ui)/GasEstimate";
+import useSwap from "@/hooks/useSwap";
 
 const TransactionCard = () => {
   const [inputAmount, setInputAmount] = useState("");
@@ -31,6 +32,8 @@ const TransactionCard = () => {
   const { mutateAsync: fetchQuote, isPending } = useFetchQuote();
 
   const { quote } = useAcrossQuoteStore();
+
+  const { swap } = useSwap();
 
   const handleFetchQuote = useCallback(async () => {
     if (!inputAmount || !inputChainId || !outputChainId || !inputToken || !outputToken) return;
@@ -50,6 +53,20 @@ const TransactionCard = () => {
       console.log(error);
     }
   }, [inputAmount, inputChainId, outputChainId, inputToken, outputToken]);
+
+  const swapHandler = async () => {
+    if (!quote || !inputToken || !outputToken || !inputChainId || !outputChainId) return;
+
+    await swap(
+      inputToken?.address,
+      outputToken?.address,
+      quote?.deposit.inputAmount,
+      quote?.deposit.outputAmount,
+      outputChainId,
+      quote?.deposit.exclusiveRelayer,
+      quote?.deposit.quoteTimestamp
+    );
+  };
 
   useEffect(() => {
     if (!inputAmount || !inputChainId || !outputChainId || !inputToken || !outputToken) return;
@@ -86,7 +103,7 @@ const TransactionCard = () => {
             Fetching quote
           </Button>
         ) : (
-          <Button className="w-[97%] h-[50px] m-auto text-xl" disabled={quote ? false : true}>
+          <Button className="w-[97%] h-[50px] m-auto text-xl" disabled={quote ? false : true} onClick={swapHandler}>
             Swap
           </Button>
         )}

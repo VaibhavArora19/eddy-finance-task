@@ -44,7 +44,7 @@ function ChainModal(props: TProps) {
           return (
             <div
               key={chain.id}
-              className="cursor-pointer rounded-xl border-2 border-gray-600 m-0 p-0 h-[70px]"
+              className="cursor-pointer rounded-xl border-2 border-gray-600 m-0 p-0 h-[4rem]"
               onClick={() => setCurrentChainId(chain.id)}
             >
               <Image src={chainIdToImage(chain.id).url} alt={chain.name} width={60} height={60} className="p-2" />
