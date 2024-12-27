@@ -3,6 +3,7 @@ import { ABI } from "@/constants/abi";
 import { ethers, TransactionReceipt } from "ethers";
 import { useAppDispatch } from "@/redux/hooks";
 import { transactionStatusActions } from "@/redux/actions";
+import { erc20Abi } from "viem";
 
 const useSwap = () => {
   const dispatch = useAppDispatch();
@@ -16,33 +17,43 @@ const useSwap = () => {
     exclusiveRelayer: string,
     quoteTimestamp: number
   ) => {
-    //@ts-expect-error metamask might not be available
-    const provider = new ethers.BrowserProvider(window.ethereum);
+    try {
+      //@ts-expect-error metamask might not be available
+      const provider = new ethers.BrowserProvider(window.ethereum);
 
-    const signer = await provider.getSigner();
+      const signer = await provider.getSigner();
 
-    const address = await signer.getAddress();
+      const address = await signer.getAddress();
 
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+      const erc20Contract = new ethers.Contract(inputToken, erc20Abi, signer);
 
-    const tx = await contract.deposit(
-      address,
-      inputToken,
-      outputToken,
-      inputAmount,
-      outputAmount,
-      destinationChainId,
-      exclusiveRelayer,
-      quoteTimestamp
-    );
+      const approvalTx = await erc20Contract.approve(CONTRACT_ADDRESS, inputAmount);
 
-    const transactionReceipt: TransactionReceipt = await tx.wait();
+      await approvalTx.wait();
 
-    const txHash = transactionReceipt.hash;
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
-    dispatch(transactionStatusActions.setTxHash(txHash));
+      const tx = await contract.deposit(
+        address,
+        inputToken,
+        outputToken,
+        inputAmount,
+        outputAmount,
+        destinationChainId,
+        exclusiveRelayer,
+        quoteTimestamp
+      );
 
-    return txHash;
+      const transactionReceipt: TransactionReceipt = await tx.wait();
+
+      const txHash = transactionReceipt.hash;
+
+      dispatch(transactionStatusActions.setTxHash(txHash));
+
+      return txHash;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return {
