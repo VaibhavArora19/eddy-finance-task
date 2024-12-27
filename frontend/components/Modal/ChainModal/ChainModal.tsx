@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../Modal";
-import { mainnet, optimism, arbitrum, base, bsc, zksync, mode, polygon } from "viem/chains";
+import { mainnet, optimism, arbitrum, base, zksync, mode, polygon } from "viem/chains";
 import { chainIdToImage } from "@/lib/chainIdToImage";
 import Image from "next/image";
 import { useFetchTokensList } from "@/hooks/useFetchTokenList";
@@ -16,7 +16,7 @@ type TProps = {
   setChainId: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
-const chains = [mainnet, optimism, arbitrum, base, bsc, zksync, mode, polygon];
+const chains = [mainnet, optimism, arbitrum, base, zksync, mode, polygon];
 
 function ChainModal(props: TProps) {
   const [currentChainId, setCurrentChainId] = useState<number | null>(null);

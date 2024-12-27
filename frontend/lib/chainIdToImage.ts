@@ -20,11 +20,6 @@ export const chainIdToImage = (chainId: number) => {
         chainId: 10,
         url: "/chains/optimism.png",
       };
-    case 56:
-      return {
-        chainId: 56,
-        url: "/chains/bsc.png",
-      };
     case 8453:
       return {
         chainId: 8453,

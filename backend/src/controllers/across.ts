@@ -20,6 +20,9 @@ const getQuote = async (req: Request, res: Response, next: NextFunction) => {
 
     const outputTokenInfo = outputChainInfo.outputTokens.find((token) => ethers.getAddress(token.address) === ethers.getAddress(outputToken));
 
+    console.log("inputTokenInfo: ", inputTokenInfo);
+    console.log("outputTokenInfo: ", outputTokenInfo);
+
     if (!inputTokenInfo || !outputTokenInfo) {
       res.status(400).json({ message: "Invalid input or output token." });
       return;
@@ -55,7 +58,7 @@ const getQuote = async (req: Request, res: Response, next: NextFunction) => {
           lpFee: quote.fees.lpFee.total.toString(),
           relayerGasFee: quote.fees.relayerGasFee.total.toString(),
           relayerCapitalFee: quote.fees.relayerCapitalFee.total.toString(),
-          totalRelayFee: quote.fees.totalRelayFee.total.toString(),
+          totalRelayFee: ethers.formatUnits(quote.fees.totalRelayFee.total.toString(), inputTokenInfo.decimals),
         },
         isAmountTooLow: quote.isAmountTooLow,
         estimatedFillTimeSec: quote.estimatedFillTimeSec,

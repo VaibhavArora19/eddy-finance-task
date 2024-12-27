@@ -34,18 +34,10 @@ export type TQuoteResponse = {
       maxDepositInstant: string;
     };
     fees: {
-      lpFee: {
-        total: string;
-      };
-      relayerGasFee: {
-        total: string;
-      };
-      relayerCapitalFee: {
-        total: string;
-      };
-      totalRelayFee: {
-        total: string;
-      };
+      lpFee: string;
+      relayerGasFee: string;
+      relayerCapitalFee: string;
+      totalRelayFee: string;
     };
     isAmountTooLow: boolean;
     estimatedFillTimeSec: number;

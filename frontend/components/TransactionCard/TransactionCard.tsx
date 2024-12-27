@@ -15,6 +15,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { acrossQuoteActions } from "@/redux/actions";
 import { useAcrossQuoteStore } from "@/redux/hooks";
 import { Loader2 } from "lucide-react";
+import GasEstimate from "../(ui)/GasEstimate";
 
 const TransactionCard = () => {
   const [inputAmount, setInputAmount] = useState("");
@@ -76,15 +77,16 @@ const TransactionCard = () => {
           <IoArrowDownSharp className="mb-2 text-3xl text-center" />
         </div>
         <OutputTokenCard setIsModalOpen={setIsModalOpen} setTokenType={setTokenType} chainId={outputChainId} token={outputToken} />
+        <GasEstimate quote={quote} />
       </CardContent>
       <CardFooter>
         {isPending ? (
-          <Button disabled className="w-[90%] h-[50px] m-auto text-xl">
+          <Button disabled className="w-[97%] h-[50px] m-auto text-xl">
             <Loader2 className="animate-spin " />
             Fetching quote
           </Button>
         ) : (
-          <Button className="w-[90%] h-[50px] m-auto text-xl" disabled={quote ? false : true}>
+          <Button className="w-[97%] h-[50px] m-auto text-xl" disabled={quote ? false : true}>
             Swap
           </Button>
         )}

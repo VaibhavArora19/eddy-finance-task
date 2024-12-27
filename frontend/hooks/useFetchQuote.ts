@@ -8,6 +8,8 @@ export const useFetchQuote = () => {
     try {
       const { data } = await _axios.post<TQuoteResponse>("/quote", quoteAgrs);
 
+      console.log("data: ", data);
+
       return { quote: data.quote, outputAmount: data.outputAmount };
     } catch (error) {
       console.log(error);
