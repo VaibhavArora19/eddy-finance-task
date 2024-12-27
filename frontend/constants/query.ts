@@ -5,3 +5,7 @@ export enum TOKENS {
 export enum QUOTE {
   FETCH_QUOTE = "FETCH_QUOTE",
 }
+
+export enum TRANSACTION {
+  GET_STATUS = "GET_STATUS",
+}

@@ -16,7 +16,7 @@ import { acrossQuoteActions } from "@/redux/actions";
 import { useAcrossQuoteStore } from "@/redux/hooks";
 import { Loader2 } from "lucide-react";
 import GasEstimate from "../(ui)/GasEstimate";
-import useSwap from "@/hooks/useSwap";
+import { useSwap } from "@/hooks/useSwap";
 
 const TransactionCard = () => {
   const [inputAmount, setInputAmount] = useState("");
@@ -79,7 +79,7 @@ const TransactionCard = () => {
   }, [inputAmount, inputChainId, outputChainId, inputToken, outputToken, handleFetchQuote]);
 
   return (
-    <Card className="w-[30rem] m-auto mt-[10vh]">
+    <Card className="w-[30rem] mt-[10vh]">
       <TransactionCardTitle />
       <CardContent>
         <InputTokenCard

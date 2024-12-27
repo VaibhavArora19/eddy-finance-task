@@ -1,8 +1,12 @@
 import { CONTRACT_ADDRESS } from "@/constants";
 import { ABI } from "@/constants/abi";
 import { ethers, TransactionReceipt } from "ethers";
+import { useAppDispatch } from "@/redux/hooks";
+import { transactionStatusActions } from "@/redux/actions";
 
 const useSwap = () => {
+  const dispatch = useAppDispatch();
+
   const swap = async (
     inputToken: string,
     outputToken: string,
@@ -36,6 +40,8 @@ const useSwap = () => {
 
     const txHash = transactionReceipt.hash;
 
+    dispatch(transactionStatusActions.setTxHash(txHash));
+
     return txHash;
   };
 
@@ -44,4 +50,4 @@ const useSwap = () => {
   };
 };
 
-export default useSwap;
+export { useSwap };

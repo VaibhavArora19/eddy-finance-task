@@ -6,3 +6,5 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const useAcrossQuoteStore = () => useAppSelector((state) => state.acrossQuote);
+
+export const useTransactionStatusStore = () => useAppSelector((state) => state.transactionStatus);

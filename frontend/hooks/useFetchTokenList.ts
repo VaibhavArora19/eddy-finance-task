@@ -18,7 +18,7 @@ const fetchOutputTokensList = async (chainId: number): Promise<TokenInfo[]> => {
   return outputTokens;
 };
 
-export const useFetchTokensList = (chainId: number | null, type: TokenListType) => {
+export const useFetchTokensList = (chainId: number | null | undefined, type: TokenListType) => {
   const fetchTokensList = async () => {
     if (!chainId) return;
 
