@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@across-protocol/app-sdk": "^0.0.4",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@reduxjs/toolkit": "^2.5.0",
@@ -23,6 +24,7 @@
     "ethers": "^6.13.4",
     "lucide-react": "^0.469.0",
     "next": "14.2.16",
+    "next-themes": "^0.4.4",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.4.0",
