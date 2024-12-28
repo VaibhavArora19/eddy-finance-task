@@ -1,4 +1,5 @@
 export const chainIdToImage = (chainId: number) => {
+  console.log("chainId is: ", chainId);
   switch (chainId) {
     case 1:
       return {

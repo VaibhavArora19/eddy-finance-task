@@ -8,4 +8,5 @@ export enum QUOTE {
 
 export enum TRANSACTION {
   GET_STATUS = "GET_STATUS",
+  HISTORY = "HISTORY",
 }
