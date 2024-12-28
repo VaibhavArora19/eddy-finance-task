@@ -5,6 +5,9 @@ import { NextFunction, Request, Response } from "express";
 import { CONTRACT_ADDRESS } from "../constants/index";
 import { ABI } from "src/constants/abi";
 
+//get transaction history endpoint
+//Fetches the tranasction history of the wallet address by listening to events
+//emitted by our contract
 const getTransactionHistory = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { address } = req.params;

@@ -29,12 +29,17 @@ const TransactionCard = () => {
 
   const dispatch = useAppDispatch();
 
+  //custom hook that implements fetchQuote function
   const { mutateAsync: fetchQuote, isPending } = useFetchQuote();
 
+  // quote present in global state
   const { quote } = useAcrossQuoteStore();
 
+  //custom hook that implements swap function
   const { swap } = useSwap();
 
+  //*** fetch quote ***//
+  //** Handle fetch quote fetches the across quote as soon as all the necessary fields are available */
   const handleFetchQuote = useCallback(async () => {
     if (!inputAmount || !inputChainId || !outputChainId || !inputToken || !outputToken) return;
 
@@ -47,6 +52,7 @@ const TransactionCard = () => {
         inputAmount: inputAmount,
       });
 
+      //* Set the quote and output amount in the global state to be used in other components
       dispatch(acrossQuoteActions.setQuote(data.quote));
       dispatch(acrossQuoteActions.setOutputAmount(data.outputAmount));
     } catch (error) {
@@ -54,6 +60,8 @@ const TransactionCard = () => {
     }
   }, [inputAmount, inputChainId, outputChainId, inputToken, outputToken]);
 
+  //*** swap handler ***//
+  //** Swap handler is called when the user clicks on the swap button and wants to perform the swap */
   const swapHandler = async () => {
     if (!quote || !inputToken || !outputToken || !inputChainId || !outputChainId) return;
 
@@ -69,6 +77,8 @@ const TransactionCard = () => {
     );
   };
 
+  //*** useEffect ***//
+  //* calls the fetchQuote function after all the fields are available
   useEffect(() => {
     if (!inputAmount || !inputChainId || !outputChainId || !inputToken || !outputToken) return;
 

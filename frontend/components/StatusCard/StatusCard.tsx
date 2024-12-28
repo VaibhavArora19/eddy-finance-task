@@ -14,7 +14,10 @@ type TProps = {
   deposit?: Deposit;
 };
 
+//Status card component that displays the current status of the transaction
+//This component is called when txHash is available
 function StatusCard({ txHash, currentState, deposit }: TProps) {
+  //Fetches the input and output tokens of the transaction
   const { data: inputTokens } = useFetchTokensList(deposit?.originChainId, TokenListType.INPUT);
   const { data: outputTokens } = useFetchTokensList(deposit?.destinationChainId, TokenListType.OUTPUT);
 

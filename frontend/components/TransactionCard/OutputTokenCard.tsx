@@ -9,6 +9,7 @@ type TProps = {
   token: TokenInfo | null;
 };
 
+//Token output component that allows the user to select a token to receive from the list of tokens available on the chain
 const OutputTokenCard = (props: TProps) => {
   return (
     <TokenInput

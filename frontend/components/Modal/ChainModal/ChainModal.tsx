@@ -18,9 +18,11 @@ type TProps = {
 
 const chains = [mainnet, optimism, arbitrum, base, zksync, mode, polygon];
 
+//Chain Modal shows the list of chains and tokens available on the chain
 function ChainModal(props: TProps) {
   const [currentChainId, setCurrentChainId] = useState<number | null>(null);
 
+  //fetches the tokens of the current chain
   const { data } = useFetchTokensList(currentChainId, props.tokenType);
 
   const setToken = (token: TokenInfo) => {

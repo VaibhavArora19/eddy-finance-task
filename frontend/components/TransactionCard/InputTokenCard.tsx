@@ -11,6 +11,7 @@ type TProps = {
   token: TokenInfo | null;
 };
 
+//Token input component that allows the user to select a token from the list of tokens available on the chain
 const InputTokenCard = (props: TProps) => {
   return (
     <TokenInput

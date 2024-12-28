@@ -12,14 +12,17 @@ const getQuote = async (req: Request, res: Response, next: NextFunction) => {
       return;
     }
 
+    //get chain info from across for the origin and destination chains
     const inputChainInfo = await client.getChainInfo(originChainId);
 
     const outputChainInfo = await client.getChainInfo(destinationChainId);
 
+    //get input and output token info from the chain info for the input and output tokens
     const inputTokenInfo = inputChainInfo.inputTokens.find((token) => ethers.getAddress(token.address) === ethers.getAddress(inputToken));
 
     const outputTokenInfo = outputChainInfo.outputTokens.find((token) => ethers.getAddress(token.address) === ethers.getAddress(outputToken));
 
+    //if input or output token info is not found, return an error
     if (!inputTokenInfo || !outputTokenInfo) {
       res.status(400).json({ message: "Invalid input or output token." });
       return;
@@ -33,12 +36,11 @@ const getQuote = async (req: Request, res: Response, next: NextFunction) => {
       isNative: inputTokenInfo.symbol === "ETH",
     };
 
+    //generate the quote using across
     const quote = await client.getQuote({
       route,
       inputAmount: ethers.parseUnits(inputAmount, inputTokenInfo.decimals),
     });
-
-    console.log("deadline: ", quote.deposit.exclusivityDeadline);
 
     res.status(200).json({
       message: "Quote fetched successfully.",

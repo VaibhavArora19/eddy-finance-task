@@ -7,11 +7,14 @@ import { useEffect, useState } from "react";
 
 export default function History() {
   const [address, setAddress] = useState("");
+
+  //Fetches the transaction history of the wallet address as soon as address is available
   const { data: transactions } = useFetchTransactionHistory(address);
 
   console.log("address is: ", address);
   console.log("data is; ", transactions);
 
+  //Fetches the wallet address to fetch the transaction history
   useEffect(() => {
     async function getWalletAddress() {
       //@ts-expect-error metamask might not be available
