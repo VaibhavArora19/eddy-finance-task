@@ -38,6 +38,8 @@ const getQuote = async (req: Request, res: Response, next: NextFunction) => {
       inputAmount: ethers.parseUnits(inputAmount, inputTokenInfo.decimals),
     });
 
+    console.log("deadline: ", quote.deposit.exclusivityDeadline);
+
     res.status(200).json({
       message: "Quote fetched successfully.",
       quote: {

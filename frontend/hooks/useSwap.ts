@@ -19,6 +19,7 @@ const useSwap = () => {
     exclusivityDeadline: number
   ) => {
     try {
+      console.log("exclusivityDeadline is: ", exclusivityDeadline);
       //@ts-expect-error metamask might not be available
       const provider = new ethers.BrowserProvider(window.ethereum);
 
@@ -43,7 +44,7 @@ const useSwap = () => {
         destinationChainId,
         exclusiveRelayer,
         quoteTimestamp,
-        exclusivityDeadline,
+        0,
         {
           gasLimit: "200000",
         }

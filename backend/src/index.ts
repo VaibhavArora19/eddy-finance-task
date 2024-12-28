@@ -12,6 +12,10 @@ app.use(cors());
 app.use(acrossRouter);
 app.use(transactionRouter);
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 app.listen(process.env.PORT || 8000, () => {
   console.log("Server started");
 });
